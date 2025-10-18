@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFC Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UFC Quiz</h1>
+        <div class="question" id="question"></div>
+        <ul class="options" id="options"></ul>
+        <button id="nextBtn" style="display: none;">Next Question</button>
+        <div class="result" id="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Who is known as 'The Notorious'?",
+                options: ["Conor McGregor", "Khabib Nurmagomedov", "Jon Jones", "Amanda Nunes"],
+                answer: "Conor McGregor"
+            },
+            {
+                question: "Which UFC fighter has the most title defenses?",
+                options: ["Anderson Silva", "Georges St-Pierre", "Jon Jones", "Daniel Cormier"],
+                answer: "Georges St-Pierre"
+            },
+            {
+                question: "What year was the UFC founded?",
+                options: ["1993", "2000", "1985", "1997"],
+                answer: "1993"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            const optionsList = document.getElementById("options");
+            optionsList.innerHTML = '';
+            currentQuestion.options.forEach(option => {
+                const li = document.createElement("li");
+                li.innerText = option;
+                li.onclick = () => selectOption(option);
+                optionsList.appendChild(li);
+            });
+            document.getElementById("nextBtn").style.display = 'none';
+        }
+
+        function selectOption(option) {
+            if (option === questions[currentQuestionIndex].answer) {
+                score++;
+            }
+            document.getElementById("nextBtn").style.display = 'block';
+            if (currentQuestionIndex === questions.length - 1) {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById("question").style.display = 'none';
+            document.getElementById("options").style.display = 'none';
+            document.getElementById("nextBtn").style.display = 'none';
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = `Your score: ${score} out of ${questions.length}`;
+            resultDiv.style.display = 'block';
+        }
+
+        document.getElementById("nextBtn").onclick = () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        };
+
+        loadQuestion();
+    </script>
+</body>
+</html>
